@@ -1,0 +1,32 @@
+
+table {
+    border-collapse: collapse;
+    border-color: black;
+    width: 20em;
+    height: 8em;
+    margin: 14em auto;
+}
+
+td {
+    background-color: cornflowerblue;
+}
+
+#segyter #y {
+    background-color: yellow;
+}
+
+#segyter td {
+    background-color: aquamarine;
+}
+
+.tercera{
+    background-color: violet;
+}
+
+.pyu {
+    background-color: orangered;
+}
+
+#black {
+    background-color: black;
+}
