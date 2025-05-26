@@ -1,0 +1,84 @@
+* {
+    padding: 0em;
+    margin:0em;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.1),
+            rgba(255,255,255,0.1)), 
+        url(../src/marco-aurelio.jpg);
+    background-size: cover;
+    color:#FFFF
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+header h1 {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0.5em;
+    color: black;
+    width: 50%;
+    border-radius: 20px;
+    margin-bottom: 0.5em;
+    box-shadow: 0 4px 5px  rgba(200, 155, 20, 1);
+}
+
+h3,h4 {
+    padding-bottom:0.3em;
+    text-align: center;
+}
+
+#menu {
+    float:left;
+    width: 15%;
+    margin-left: 1em;
+    margin-right: 1em;
+    background-color:rgba(255, 255, 255, 0.9);
+    border-radius: 0.8em;
+    color:#000;
+    text-align: center;
+    padding: 0.2em;
+}
+
+#menu a{
+    color: #333;
+}
+
+#contenido {
+    float:left;
+    width: 80%;
+    z-index: 1000px;
+    align-items: center;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 1em;
+    padding: 1em;
+    max-height: calc(100vh - 8em - 5em); 
+    overflow-y:auto;
+}
+
+footer {
+    clear: both;
+    background: rgba(0,0,0,0.7);
+    position: fixed;
+    width: 100%;
+    bottom: 0em;
+    text-align: center;
+    padding: 1em;
+    z-index: 1000px;    
+}
+
+a{
+    color: #FFFF;
+    text-decoration: none;
+}
