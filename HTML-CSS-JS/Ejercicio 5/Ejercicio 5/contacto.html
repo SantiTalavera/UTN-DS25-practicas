@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Contacto</title>
+        <link rel="stylesheet" type="text/css" href="/Ejercicio 5/CSS/contacto.css">
+    </head>
+    <body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="seccion1.html">Ficción</a></li>
+            <li><a href="seccion2.html">Deporte</a></li>
+            <li><a href="seccion3.html">Infantil</a></li>
+            <li><a href="seccion4.html">Historia</a></li>
+            <li><a href="registro.html">Registrarse</a></li>
+            <li><a href="contacto.html" class="activo">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <div id="cabecera">
+        <img src="Imagenes/logoLibreria.png" alt="Logo" class="logo">
+        <h2>Contacto</h2>
+        </div>
+    </header>
+
+    <main>
+        <section class="formulario-contacto">
+        <h1>Formulario de Contacto</h1>
+        <form action="#" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="asunto">Asunto:</label>
+            <input type="text" id="asunto" name="asunto" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="6" required></textarea>
+
+            <button type="submit">Enviar</button>
+        </form>
+        </section>
+    </main>
+
+    </body>
+</html>
