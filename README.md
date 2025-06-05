@@ -5,7 +5,7 @@ Desarrollo guiado de las practicas de la catedra de Desarollo de Software de la 
 - HTML
 - CSS
 - JavaScript
-Nota: Se han utilizado en los ejercicios elementos de HTML y HTML5. No se utilizaron secuencialmente.
+- Nota: Se han utilizado en los ejercicios elementos de HTML y HTML5. No se utilizaron secuencialmente.
 
 ## Contenidos
 ### Tecnologias del lado del cliente
