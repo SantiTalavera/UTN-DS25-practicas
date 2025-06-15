@@ -2,10 +2,12 @@
 Desarrollo guiado de las practicas de la catedra de Desarollo de Software de la UTN FRLP en conjunto con archivos utiles a posteriori.
 
 ## Tecnologias utilizadas
-- HTML
-- CSS
-- JavaScript
-- Nota: Se han utilizado en los ejercicios elementos de HTML y HTML5. No se utilizaron secuencialmente.
+- HTML4 y HTML5
+- CSS3
+- JavaScript + jQuery
+    - La catedra propone una ejercitacion de 17 incisos de los cuales se han desarrollado de la siguiente manera:
+    - Utilizacion de Javascript puro en los incisos 1-5 y 11-14
+    - Utilizacion de jQuery en los incisos 6-10 y 15-17
 
 ## Contenidos
 ### Tecnologias del lado del cliente
