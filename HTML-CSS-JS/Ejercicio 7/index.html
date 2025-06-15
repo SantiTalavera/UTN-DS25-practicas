@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ejercicios JavaScript UTN DS25 C07</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <!-- Ej 1 -->
+    <section id="ej1">
+      <h2>1. Sumar 5</h2>
+      <input id="e1-input" type="number" placeholder="Ingresa un número">
+      <button id="e1-btn">Sumar 5</button>
+      <span id="e1-out"></span>
+    </section>
+
+    <!-- Ej 2 -->
+    <section id="ej2">
+      <h2>2. Concatenar cadenas</h2>
+      <input id="e2-a" type="text" placeholder="Cadena A">
+      <input id="e2-b" type="text" placeholder="Cadena B">
+      <button id="e2-btn">Concatenar</button>
+      <span id="e2-out"></span>
+    </section>
+
+    <!-- Ej 3 -->
+    <section id="ej3">
+      <h2>3. Comparar dos números</h2>
+      <input id="e3-a" type="number" placeholder="Número A">
+      <input id="e3-b" type="number" placeholder="Número B">
+      <button id="e3-btn">Comparar</button>
+      <span id="e3-out"></span>
+    </section>
+
+    <!-- Ej 4 -->
+    <section id="ej4">
+      <h2>4. Grupo según 1–10 (prompt)</h2>
+      <button id="e4-btn">Ingresar número</button>
+      <span id="e4-out"></span>
+    </section>
+
+    <!-- Ej 5 -->
+    <section id="ej5">
+      <h2>5. Sumatoria 0–10</h2>
+      <button id="e5-btn">Calcular suma</button>
+      <span id="e5-out"></span>
+    </section>
+
+    <!-- Ej 6 -->
+    <section id="ej6">
+      <h2>6. Producto de array [1…10]</h2>
+      <button id="e6-btn">Calcular producto</button>
+      <pre id="e6-out"></pre>
+    </section>
+
+    <!-- Ej 7 -->
+    <section id="ej7">
+      <h2>7. Función producto(a,b)</h2>
+      <input id="e7-a" type="number" placeholder="A">
+      <input id="e7-b" type="number" placeholder="B">
+      <button id="e7-btn">Multiplicar</button>
+      <div id="e7-out"></div>
+    </section>
+
+    <!-- Ej 8 -->
+    <section id="ej8">
+      <h2>8. Función concatena(s1,s2)</h2>
+      <input id="e8-a" type="text" placeholder="Cadena 1">
+      <input id="e8-b" type="text" placeholder="Cadena 2">
+      <button id="e8-btn">Concatenar</button>
+      <div id="e8-out"></div>
+    </section>
+
+    <!-- Ej 9 -->
+    <section id="ej9">
+      <h2>9. Mayor de dos valores</h2>
+      <input id="e9-a" type="number" placeholder="X">
+      <input id="e9-b" type="number" placeholder="Y">
+      <button id="e9-btn">¿Quién es mayor?</button>
+      <div id="e9-out"></div>
+    </section>
+
+    <!-- Ej 10 -->
+    <section id="ej10">
+      <h2>10. Dibujar medio-árbol de asteriscos</h2>
+      <input id="e10-input" type="number" placeholder="Altura">
+      <button id="e10-btn">Dibujar</button>
+      <div id="e10-out"></div>
+    </section>
+
+    <!-- Ej 11 -->
+    <section id="ej11">
+      <h2>11. Descuento según monto y medio de pago</h2>
+      <input id="e11-monto" type="number" placeholder="Monto $">
+      <select id="e11-metodo">
+        <option value="">Método</option>
+        <option value="E">Efectivo</option>
+        <option value="D">Débito</option>
+        <option value="C">Crédito</option>
+      </select>
+      <button id="e11-btn">Calcular final</button>
+      <div id="e11-out"></div>
+    </section>
+
+    <!-- Ej 12 -->
+    <section id="ej12">
+      <h2>12. Generar medio-árbol (función)</h2>
+      <input id="e12-altura" type="number" placeholder="Altura">
+      <button id="e12-btn">Mostrar</button>
+      <div id="e12-out"></div>
+    </section>
+
+    <!-- Ej 13 -->
+    <section id="ej13">
+      <h2>13. Día de la semana</h2>
+      <input id="e13-dia" type="number" placeholder="1–7">
+      <button id="e13-btn">¿Qué día?</button>
+      <div id="e13-out"></div>
+    </section>
+
+    <!-- Ej 14 -->
+    <section id="ej14">
+      <h2>14. Promedio de números (prompt)</h2>
+      <button id="e14-btn">Ingresar valores</button>
+      <div id="e14-out"></div>
+    </section>
+
+    <!-- Ej 15 -->
+    <section id="ej15">
+      <h2>15. Medio-árbol via prompt</h2>
+      <button id="e15-btn">Altura y dibujar</button>
+      <div id="e15-out"></div>
+    </section>
+
+    <!-- Ej 16 -->
+    <section id="ej16">
+      <h2>16. Portero eléctrico (prompt)</h2>
+      <button id="e16-btn">Llamar</button>
+      <div id="e16-out"></div>
+    </section>
+
+    <!-- Ej 17 -->
+    <section id="ej17">
+      <h2>17. Teclado en pantalla</h2>
+      <div id="e17-display" style="font-size:1.2em;min-height:1.5em;border:1px solid #ccc;padding:0.5em;"></div>
+      <div id="e17-keyboard"></div>
+      <button id="e17-clear">Limpiar</button>
+    </section>
+  </main>
+</body>
+</html>
