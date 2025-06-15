@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title> Libreria Estoica </title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="css/form.css">
+    </head>
+    <body>
+        <div id="contenedor">
+            <div id="cabecera">
+                <img src="Imagenes/logo.png" alt="Logo" class="logo">
+                <h2> Libreria Estoica </h2>
+            </div>
+            <div id="menu"> 
+                    <ul>
+                        <li><a href="main.html">Inicio</a></li>
+                        <li><a href="fda.html">Filosofos de la antiguedad</a></li>
+                        <li><a href="rdr.html">Renovadores del Renacimiento</a></li>
+                        <li><a href="dc.html">Difusores contemporaneos</a></li>
+                        <li><a href="pa.html">Populares en la actualidad</a></li>
+                        <li><a href="reg.html">Registrarse</a></li>
+                        <li><a href="cont.html">Contacto</a></li>
+                    </ul>
+            </div>
+            <div id="contenido">
+                <div id="principal">
+                    <div class="formulario">
+                        <h1>Formulario de Registro</h1>
+                        <form action="#" method="post">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" required>
+
+                            <label for="apellido">Apellido:</label>
+                            <input type="text" id="apellido" name="apellido" required>
+
+                            <label for="fecha">Fecha de Nacimiento:</label>
+                            <input type="date" id="fecha" name="fecha" required>
+
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" required>
+
+                            <label>Sexo:</label>
+                            <div class="sexo">
+                                <label><input type="radio" name="sexo" value="masculino" required> Masculino</label>
+                                <label><input type="radio" name="sexo" value="femenino"> Femenino</label>
+                                <label><input type="radio" name="sexo" value="otro"> Otro</label>
+                            </div>
+
+                            <label for="tema">Tema Favorito:</label>
+                            <select id="tema" name="tema">
+                                <option value="">Seleccione un tema</option>
+                                <option value="Filosofos de la antiguedad">Filosofos de la antiguedad</option>
+                                <option value="Renovadores del Renacimiento">Renovadores del Renacimiento</option>
+                                <option value="Difusores contemporaneos">Difusores contemporaneos</option>
+                                <option value="historia">Populares en la actualidad</option>
+                            </select>
+
+                            <label for="telefono">Teléfono:</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="Ej: +54 9 11 2345-6789">
+
+                            <label for="website">Sitio Web Personal:</label>
+                            <input type="url" id="website" name="website" placeholder="https://ejemplo.com">
+
+                            <label for="color">Color Favorito:</label>
+                            <input type="color" id="color" name="color">
+
+                            <label for="satisfaccion">Nivel de conformidad con el sitio (1 a 10): 
+                                <span id="valorSatisfaccion">5</span>
+                            </label>
+                            <input type="range" id="satisfaccion" name="satisfaccion" min="1" max="10" value="5" oninput="document.getElementById('valorSatisfaccion').textContent = this.value">
+
+                            <button type="submit">Registrarse</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="pie"> 
+                <p>&copy; 2025 Santiago Talavera</p>
+                <p>
+                    <a href="#">Términos y Condiciones</a> |
+                    <a href="#">Política de Privacidad</a> |
+                    <a href="#">Redes Sociales</a>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
