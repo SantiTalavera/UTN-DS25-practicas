@@ -12,3 +12,5 @@ Desarrollo guiado de las practicas de la catedra de Desarollo de Software de la 
 ## Contenidos
 ### Tecnologias del lado del cliente
 - [HTML-CSS-JS](https://github.com/SantiTalavera/UTN-DS25-practicas/tree/4465d9992742784e52d2e44507c7aa537d5831b6/HTML-CSS-JS)
+- [React puro](https://github.com/SantiTalavera/UTN-DS25-practicas/tree/81419a82a987452362561606f259ae48f8edcbd0/React)
+- [React + Bootstrap](https://github.com/SantiTalavera/UTN-DS25-practicas/tree/81419a82a987452362561606f259ae48f8edcbd0/React-ui-lib)
