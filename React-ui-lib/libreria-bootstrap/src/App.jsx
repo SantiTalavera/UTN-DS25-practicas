@@ -1,14 +1,17 @@
+// src/App.jsx
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
+import Layout       from './components/Layout'
+import HomePage     from './pages/HomePage'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        {/* rutas para las otras secciones a futuro */}
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   )
 }
