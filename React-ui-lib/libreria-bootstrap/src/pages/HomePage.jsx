@@ -1,29 +1,67 @@
-import { Container, Row, Col, Card } from 'react-bootstrap'
+// src/pages/HomePage.jsx
+import React, { useState, useEffect, useMemo } from 'react'
+import {Container,Row, Col, Card, Form,Button} from 'react-bootstrap'
+import AgregarLibroForm from '../components/AgregarLibroForm'
 
-export default function HomePage() {
-  const libros = [
-    { titulo: 'Meditaciones', img: '/Imagenes/marcoaurelio.jpg', autor: 'Marco Aurelio' },
-    { titulo: 'Ensayos', img: '/Imagenes/ensayos.jpg', autor: 'Michel de Montaigne' },
-    { titulo: 'Pensar como un emperador', img: '/Imagenes/emperor.webp', autor: 'Donald Robertson' },
-    { titulo: 'El obstáculo es el camino', img: '/Imagenes/obsway.jpeg', autor: 'Ryan Holiday' }
-  ]
+export default function HomePage({ catalogo, setCatalogo }) {
+  const [busqueda, setBusqueda] = useState('')
+  const [randomBooks, setRandomBooks] = useState([])
+  const [showForm, setShowForm] = useState(false)  
+
+  useEffect(() => {
+    const copia = [...catalogo]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4)
+    setRandomBooks(copia)
+  }, [catalogo])
+
+  const MostrarCuatro = useMemo(() => {
+    if (!busqueda.trim()) return randomBooks
+    return catalogo.filter(libro =>
+      libro.titulo.toLowerCase().includes(busqueda.toLowerCase())
+    )
+  }, [busqueda, randomBooks, catalogo])
+
+  const agregarLibro = (nuevo) => {
+    setCatalogo([...catalogo, nuevo])
+    setShowForm(false)
+  }
 
   return (
     <Container className="py-4">
+      <Button
+        variant="secondary"
+        className="mb-3"
+        onClick={() => setShowForm(!showForm)}
+      >
+        {showForm ? 'Cerrar formulario' : 'Agregar un libro'}
+      </Button>
+
+      {showForm && (
+        <AgregarLibroForm onAgregar={agregarLibro} />
+      )}
+
+      <Form className="mb-4">
+        <Form.Control
+          type="text"
+          placeholder="Buscar por título..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+        />
+      </Form>
+
       <Row className="gx-4 gy-4 justify-content-center">
-        {libros.map(libro => (
-          <Col key={libro.titulo} xs={12} sm={6} md={4} lg={3}>
+        {MostrarCuatro.map(({ titulo, img, autor, id }) => (
+          <Col key={id || titulo} xs={12} sm={6} md={4} lg={3}>
             <Card className="h-100 shadow-sm">
-              <Card.Img variant="top" src={libro.img} />
+              <Card.Img variant="top" src={img} alt={titulo} />
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-center">
-                  {libro.titulo}
-                </Card.Title>
-                <Card.Text className="text-center mb-4">
-                  <strong>Autor:</strong> {libro.autor}
+                <Card.Title className="text-center">{titulo}</Card.Title>
+                <Card.Text className="text-center text-muted mb-4">
+                  {autor}
                 </Card.Text>
-                <div className="text-center mt-auto">
-                  <Card.Link href={libro.enlace}>Ver más</Card.Link>
+                <div className="mt-auto text-center">
+                  <Card.Link href="#">Ver más</Card.Link>
                 </div>
               </Card.Body>
             </Card>

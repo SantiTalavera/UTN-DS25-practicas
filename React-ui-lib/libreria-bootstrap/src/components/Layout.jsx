@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap'
 import Sidebar from './Sidebar'
 
+
  const customStyles = `
    .navbar-brand {
      width: 100% !important;
