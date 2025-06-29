@@ -1,36 +1,38 @@
-// src/components/AgregarLibroForm.jsx
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 
+const SECCIONES = [
+  'Filosofos de la antiguedad',
+  'Renovadores del Renacimiento',
+  'Difusores contemporaneos',
+  'Populares en la actualidad'
+]
+
 export default function AgregarLibroForm({ onAgregar }) {
-  // 1 estado único con objeto
+  // 1️⃣ Incluimos seccion en el estado
   const [datosLibro, setDatosLibro] = useState({
     titulo: '',
     autor: '',
-    img: 'https://via.placeholder.com/150'  // placeholder por defecto
+    img: 'https://via.placeholder.com/150',
+    seccion: SECCIONES[0]   // valor por defecto
   })
 
-  // función genérica para actualizar cualquier campo
   const actualizarCampo = (campo, valor) => {
-    setDatosLibro({
-      ...datosLibro,
-      [campo]: valor
-    })
+    setDatosLibro(prev => ({ ...prev, [campo]: valor }))
   }
 
-  // manejar envío
   const manejarEnvio = (e) => {
     e.preventDefault()
-    // 2 llamo al callback que me pasó el padre
     onAgregar({
-      id: Date.now(),  // ID único sencillo
+      id: Date.now(),
       ...datosLibro
     })
-    // 3 reseteo formulario
+    // Reseteo formulario (mantiene primera sección)
     setDatosLibro({
       titulo: '',
       autor: '',
-      img: 'https://via.placeholder.com/150'
+      img: 'https://via.placeholder.com/150',
+      seccion: SECCIONES[0]
     })
   }
 
@@ -40,9 +42,9 @@ export default function AgregarLibroForm({ onAgregar }) {
         <Form.Label>Título</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Ingresa el título"
           value={datosLibro.titulo}
-          onChange={(e) => actualizarCampo('titulo', e.target.value)}
+          onChange={e => actualizarCampo('titulo', e.target.value)}
+          placeholder="Ingresa el título"
         />
       </Form.Group>
 
@@ -50,20 +52,32 @@ export default function AgregarLibroForm({ onAgregar }) {
         <Form.Label>Autor</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Ingresa el autor"
           value={datosLibro.autor}
-          onChange={(e) => actualizarCampo('autor', e.target.value)}
+          onChange={e => actualizarCampo('autor', e.target.value)}
+          placeholder="Ingresa el autor"
         />
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>URL de la portada</Form.Label>
+        <Form.Label>Portada (URL)</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Ingresa la URL de la imagen"
           value={datosLibro.img}
-          onChange={(e) => actualizarCampo('img', e.target.value)}
+          onChange={e => actualizarCampo('img', e.target.value)}
+          placeholder="https://..."
         />
+      </Form.Group>
+
+      <Form.Group className="mb-4">
+        <Form.Label>Sección</Form.Label>
+        <Form.Select
+          value={datosLibro.seccion}
+          onChange={e => actualizarCampo('seccion', e.target.value)}
+        >
+          {SECCIONES.map(sec => (
+            <option key={sec} value={sec}>{sec}</option>
+          ))}
+        </Form.Select>
       </Form.Group>
 
       <Button variant="primary" type="submit">
