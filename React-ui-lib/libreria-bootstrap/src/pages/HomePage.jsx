@@ -1,9 +1,11 @@
-// src/pages/HomePage.jsx
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useContext } from 'react'
 import {Container,Row, Col, Card, Form,Button} from 'react-bootstrap'
 import AgregarLibroForm from '../components/AgregarLibroForm'
+import FraseRandom from '../components/FraseRandom'
+import { CatalogoContext } from '../context/CatalogoContext'
 
-export default function HomePage({ catalogo, setCatalogo }) {
+export default function HomePage() {
+  const {catalogo, setCatalogo}=useContext(CatalogoContext)
   const [busqueda, setBusqueda] = useState('')
   const [randomBooks, setRandomBooks] = useState([])
   const [showForm, setShowForm] = useState(false)  
@@ -29,6 +31,7 @@ export default function HomePage({ catalogo, setCatalogo }) {
 
   return (
     <Container className="py-4">
+      <FraseRandom />
       <Button
         variant="secondary"
         className="mb-3"
