@@ -1,91 +1,168 @@
-import{
-    Book,
-    GetBooksResponse,
-    GetBookRequest,
-    GetBookResponse,
-    PutBookRequest,
-    PutBookResponse,
-    PostBookRequest,
-    PostBookResponse,
-    DeleteBookRequest,
-    DeleteBookResponse
-} from '../types/books';
+import prisma from '../config/prisma';
+import {
+  // Tipos generados automáticamente por Prisma
+  book as BookPrisma,
+  Section as SectionPrisma
+} from '../generated/prisma';
+import {
+  // Tipos personalizados (DTOs) para la API
+  Book as BookDTO,
+  Seccion as SeccionDTO,
+  GetBooksResponse,
+  PostBookRequest,
+  PutBookRequest,
+  PostBookResponse,
+  DeleteBookResponse,
+} from '../types/books'; // Asegúrate que la ruta a tus tipos sea la correcta
 
-let books: Book[] = [
-{titulo:'Meditaciones', img:'https://concentra.com.ar/wp-content/uploads/que-contiene-el-libro-meditaciones-de-marco-aurelio.webp', autor:'Marco Aurelio', seccion:'Filosofos de la antiguedad'},
-{titulo:'Sobre la brevedad de la vida', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDNnbbR2WvbskIcE9i1H6gPvuVjtabqp-Mfg&s', autor:'Séneca', seccion:'Filosofos de la antiguedad'},
-{titulo:'Manual de Vida (Enquiridión)', img:'https://http2.mlstatic.com/D_NQ_NP_618928-MLA77839255395_072024-O.webp', autor:'Epicteto', seccion:'Filosofos de la antiguedad'},
-{titulo:'Cartas a Lucilio', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNY4vAqCIS6uyUT-jl_Yg1a6SRJBmf9uW57w&s', autor:'Séneca', seccion:'Filosofos de la antiguedad'},
-{titulo:'Discursos', img:'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1673146928i/75645165.jpg', autor:'Epicteto (transcritos por Arriano)', seccion:'Filosofos de la antiguedad'},
-{titulo:'Pensamientos', img:'https://http2.mlstatic.com/D_NQ_NP_734180-MLA42417542004_062020-O.webp', autor:'Marco Aurelio (edición anotada)', seccion:'Filosofos de la antiguedad'},
-{titulo:'Ensayos', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0uJGAxJxgol_Zp1imaALtOiIcHLus8sRgjg&s', autor:'Michel de Montaigne', seccion:'Renovadores del Renacimiento'},
-{titulo:'Elogio de la locura', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFosuhX4NwR3kvsFFzJJcqtWvS27NT7FsEwQ&s', autor:'Erasmus de Rotterdam', seccion:'Renovadores del Renacimiento'},
-{titulo:'Política cristiana', img:'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1593059969i/53414497.jpg', autor:'Justo Lipsio', seccion:'Renovadores del Renacimiento'},
-{titulo:'Adagia', img:'https://pictures.abebooks.com/isbn/9788884023704-es.jpg', autor:'Erasmus de Rotterdam', seccion:'Renovadores del Renacimiento'},
-{titulo:'Sobre la tranquilidad del ánimo', img:'https://http2.mlstatic.com/D_NQ_NP_723355-MLA79073253799_092024-O.webp', autor:'Seneca', seccion:'Renovadores del Renacimiento'},
-{titulo:'Diálogo sobre el libre albedrío', img:'https://imgv2-1-f.scribdassets.com/img/document/457119004/original/e822cb5041/1?v=1', autor:'Michel de Montaigne', seccion:'Renovadores del Renacimiento'},
-{titulo:'La filosofía como modo de vida', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9mDwNOKY6ebO-TySmWI3nel5vXOZd4DO8UA&s', autor:'Pierre Hadot', seccion:'Difusores contemporaneos'},
-{titulo:'Cómo ser un estoico', img:'https://www.planetadelibros.com/usuaris/libros/fotos/263/original/portada_como-ser-un-estoico_massimo-pigliucci_201711140013.jpg', autor:'Massimo Pigliucci', seccion:'Difusores contemporaneos'},
-{titulo:'Guía para la buena vida', img:'https://http2.mlstatic.com/D_NQ_NP_608577-MLM53955422180_022023-O.webp', autor:'William B. Irvine', seccion:'Difusores contemporaneos'},
-{titulo:'Estoicismo y arte de la felicidad', img:'https://http2.mlstatic.com/D_NQ_NP_681664-MLU77226956466_072024-O.webp', autor:'Donald Robertson', seccion:'Difusores contemporaneos'},
-{titulo:'Pensar como un emperador', img:'https://http2.mlstatic.com/D_NQ_NP_861106-MLA82165029680_022025-O.webp', autor:'Donald Robertson', seccion:'Difusores contemporaneos'},
-{titulo:'How to Think Like a Roman Emperor', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGDxw2IJY1xaAb7QtK3d7GYCHqeM0yXjWOOw&s', autor:'Donald Robertson', seccion:'Difusores contemporaneos'},
-{titulo:'El obstáculo es el camino', img:'https://cdn.oceano.com.ar/titulos/9786075278568.jpg', autor:'Ryan Holiday', seccion:'Populares en la actualidad'},
-{titulo:'El ego es el enemigo', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx40eP9qUIGdI14Zo6p6qLkmWG0j8Jhkzfdg&s', autor:'Ryan Holiday', seccion:'Populares en la actualidad'},
-{titulo:'La quietud es la clave ', img:'https://images.cdn3.buscalibre.com/fit-in/360x360/4b/a7/4ba7665322cabbaa8fc9a239f81294d0.jpg', autor:'Ryan Holiday', seccion:'Populares en la actualidad'},
-{titulo:'Diario para estoicos', img:'https://images.cdn1.buscalibre.com/fit-in/360x360/96/9c/969c47f8cdfad69a01bff98dbc74dd38.jpg', autor:'Ryan Holiday & Stephen Hanselman', seccion:'Populares en la actualidad'},
-{titulo:'Lecciones del Estoicismo', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtdmKlUh8oyVFqEtf9xuoUHIhfjofe028S4g&s', autor:'John Sellars', seccion:'Populares en la actualidad'},
-{titulo:'Stoic Meditations', img:'https://m.media-amazon.com/images/I/71wSz6VVk6L._SY522_.jpg', autor:'Marcus Aurelius (adaptado por Gregory Hays)', seccion:'Populares en la actualidad'},
-]
+// --- MAPEO DE ENUMS ---
+// Convierte el enum de la API (con espacios) al enum de Prisma (con guiones bajos)
+const seccionDtoToPrisma = (seccion: SeccionDTO): SectionPrisma => {
+  const map: Record<SeccionDTO, SectionPrisma> = {
+    'Filosofos de la antiguedad': 'Filosofos_de_la_antiguedad',
+    'Renovadores del Renacimiento': 'Renovadores_Del_renacimiento', // Corregido el typo
+    'Difusores contemporaneos': 'Difusores_contemporaneos',
+    'Populares en la actualidad': 'Populares_de_la_actualidad',
+  };
+  return map[seccion];
+};
 
-// ==============================
-// Obtener todas las Books
-// ==============================
-// Retorna el listado completo de Books junto con el total.
-// Esto nos va a ser util para mostrar en listados o paneles administrativos (mostrar el dashboard).
+// Convierte el enum de Prisma al de la API
+const sectionPrismaToDto = (section: SectionPrisma): SeccionDTO => {
+  const map: Record<SectionPrisma, SeccionDTO> = {
+    Filosofos_de_la_antiguedad: 'Filosofos de la antiguedad',
+    Renovadores_Del_renacimiento: 'Renovadores del Renacimiento',
+    Difusores_contemporaneos: 'Difusores contemporaneos',
+    Populares_de_la_actualidad: 'Populares en la actualidad',
+  };
+  return map[section];
+};
+
+
+// --- FUNCIÓN UTILITARIA ---
+// Convierte un objeto de la base de datos (Prisma) a un objeto para la API (DTO)
+function toBookDTO(book: BookPrisma): BookDTO {
+  return {
+    id: book.id, // Es buena práctica incluir el ID en el DTO
+    titulo: book.title,
+    img: book.url,
+    autor: book.author,
+    seccion: sectionPrismaToDto(book.section),
+  };
+}
+
+
+// --- LÓGICA DEL SERVICIO ---
+
+/**
+ * Obtiene todos los libros y los devuelve en formato DTO.
+ */
 export async function getAllBooks(): Promise<GetBooksResponse> {
-    return { books, total: books.length };
+  const booksFromDB = await prisma.book.findMany({
+    orderBy: { id: 'asc' }
+  });
+
+  // Mapeamos cada libro al formato DTO antes de enviarlo
+  const booksDTO = booksFromDB.map(toBookDTO);
+
+  return {
+    books: booksDTO,
+    total: booksDTO.length
+  };
 }
 
-// ==============================
-// Obtener una Book por ID
-// ==============================
-// Busca dentro del array la Book cuyo ID coincida con el solicitado.
-// Si no existe, devuelve un mensaje de error.
-export async function getBookByTitle(request: GetBookRequest): Promise<GetBookResponse> {
-    const book = books.find(b => b.titulo === request.titulo) || null;
-    if (!book) {
-        return { book: null, message: 'Libro no encontrado' };
-    }
-    return {book};
+/**
+ * Obtiene un libro por su ID.
+ * Si no lo encuentra, lanza un error.
+ */
+export async function getBookById(id: number): Promise<BookDTO> {
+  const book = await prisma.book.findUnique({
+    where: { id }
+  });
+
+  if (!book) {
+    const error = new Error('Libro no encontrado');
+    (error as any).status = 404;
+    throw error;
+  }
+
+  return toBookDTO(book);
 }
 
+/**
+ * Crea un nuevo libro en la base de datos.
+ */
 export async function createBook(data: PostBookRequest): Promise<PostBookResponse> {
-    if (books.some(b => b.titulo === data.titulo)) {
-        return { book: null, message: 'El titulo ya existe' };
+  // Validaciones
+  if (!data.titulo?.trim() || !data.autor?.trim() || !data.seccion) {
+    return { book: null, message: 'Faltan campos obligatorios: titulo, autor, seccion' };
+  }
+  if (!data.img?.trim()) {
+    return { book: null, message: 'El campo img (url) es obligatorio' };
+  }
+
+  // Evitar duplicados
+  const exists = await prisma.book.count({
+    where: { title: data.titulo.trim(), author: data.autor.trim() }
+  });
+  if (exists > 0) {
+    return { book: null, message: 'Ya existe un libro con ese título y autor' };
+  }
+
+  const createdBook = await prisma.book.create({
+    data: {
+      title: data.titulo.trim(),
+      author: data.autor.trim(),
+      url: data.img.trim(),
+      section: seccionDtoToPrisma(data.seccion), // Usamos el mapeo
     }
+  });
 
-    const nuevoLibro: Book = {...data
-    };
-
-    books.push(nuevoLibro);
-    return { book: nuevoLibro, message: 'Libro creado exitosamente' };
+  return {
+    book: toBookDTO(createdBook),
+    message: 'Libro creado exitosamente'
+  };
 }
 
-export async function updateBook(titulo:string, data: PutBookRequest): Promise<PutBookResponse> {
-    const index = books.findIndex(b => b.titulo === titulo);
-    if (index === -1) {
-        return { message: 'Libro no encontrado' };
-    }
-    books[index] = { ...books[index], ...data };
-    return { message: 'Libro actualizado exitosamente' };
+/**
+ * Actualiza un libro existente usando su ID.
+ */
+export async function updateBook(id: number, data: PutBookRequest): Promise<PostBookResponse> {
+  // Verificamos primero si el libro existe
+  const existingBook = await prisma.book.count({ where: { id } });
+  if (existingBook === 0) {
+    return { book: null, message: 'Libro no encontrado' };
+  }
+
+  // Construimos el objeto de actualización dinámicamente
+  const dataToUpdate: Partial<BookPrisma> = {};
+  if (data.titulo) dataToUpdate.title = data.titulo.trim();
+  if (data.autor) dataToUpdate.author = data.autor.trim();
+  if (data.img) dataToUpdate.url = data.img.trim();
+  if (data.seccion) dataToUpdate.section = seccionDtoToPrisma(data.seccion);
+
+  const updatedBook = await prisma.book.update({
+    where: { id },
+    data: dataToUpdate,
+  });
+
+  return {
+    book: toBookDTO(updatedBook),
+    message: 'Libro actualizado exitosamente'
+  };
 }
 
-export async function deleteBook(titulo:string): Promise<DeleteBookResponse> {
-    const index = books.findIndex(b => b.titulo === titulo);
-    if (index === -1) {
-        return { message: 'Libro no encontrado' };
-    }
-    books.splice(index, 1);
-    return { message: 'Book eliminada exitosamente' };
+/**
+ * Elimina un libro por su ID.
+ */
+export async function deleteBook(id: number): Promise<DeleteBookResponse> {
+  try {
+    await prisma.book.delete({
+      where: { id }
+    });
+    return { message: 'Libro eliminado exitosamente' };
+  } catch (error) {
+    // Prisma lanza un error si el registro a eliminar no existe
+    return { message: 'Libro no encontrado' };
+  }
 }

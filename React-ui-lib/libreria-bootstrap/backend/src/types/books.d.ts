@@ -3,8 +3,9 @@ import e from "express"
 export type Seccion = "Filosofos de la antiguedad" | "Renovadores del Renacimiento" | "Difusores contemporaneos" | "Populares en la actualidad";
 
 export interface Book{
+    id: number,
     titulo: string,
-    img?: string,
+    img?: string | null,
     autor:string,
     seccion: Seccion
 }
@@ -24,8 +25,9 @@ export interface GetBookResponse{
 }
 
 export interface PostBookRequest{
+    id: number,
     titulo: string,
-    img?: string,
+    img?: string | null,
     autor: string,
     seccion: Seccion
 }
