@@ -13,7 +13,7 @@ import {
   PutBookRequest,
   PostBookResponse,
   DeleteBookResponse,
-} from '../types/books'; // Asegúrate que la ruta a tus tipos sea la correcta
+} from '../types/books'; 
 
 // --- MAPEO DE ENUMS ---
 // Convierte el enum de la API (con espacios) al enum de Prisma (con guiones bajos)
@@ -43,7 +43,7 @@ const sectionPrismaToDto = (section: SectionPrisma): SeccionDTO => {
 // Convierte un objeto de la base de datos (Prisma) a un objeto para la API (DTO)
 function toBookDTO(book: BookPrisma): BookDTO {
   return {
-    id: book.id, // Es buena práctica incluir el ID en el DTO
+    id: book.id, 
     titulo: book.title,
     img: book.url,
     autor: book.author,
@@ -62,7 +62,7 @@ export async function getAllBooks(): Promise<GetBooksResponse> {
     orderBy: { id: 'asc' }
   });
 
-  // Mapeamos cada libro al formato DTO antes de enviarlo
+  // Mapeo cada libro al formato DTO antes de enviarlo
   const booksDTO = booksFromDB.map(toBookDTO);
 
   return {
@@ -114,7 +114,7 @@ export async function createBook(data: PostBookRequest): Promise<PostBookRespons
       title: data.titulo.trim(),
       author: data.autor.trim(),
       url: data.img.trim(),
-      section: seccionDtoToPrisma(data.seccion), // Usamos el mapeo
+      section: seccionDtoToPrisma(data.seccion), // Uso el mapeo
     }
   });
 
