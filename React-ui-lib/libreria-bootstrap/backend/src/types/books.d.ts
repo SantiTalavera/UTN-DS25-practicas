@@ -1,15 +1,38 @@
 import e from "express"
 
-export type Seccion = "Filosofos de la antiguedad" | "Renovadores del Renacimiento" | "Difusores contemporaneos" | "Populares en la actualidad";
+export type Seccion = "Filosofos de la antiguedad" | "Renovadores del renacimiento" | "Difusores contemporaneos" | "Populares en la actualidad";
+
+//interfaces de dominio
+export interface User{
+    id: number,
+    username: string,
+    password: string
+    comentarios: Comentario[]
+}
 
 export interface Book{
     id: number,
     titulo: string,
     img?: string | null,
-    autor:string,
+    autor: Autor,
     seccion: Seccion
+    obs?: Observacion[]
 }
 
+export interface Autor{
+    id: number,
+    nombre: string
+    epoca: string
+    books: Book[]
+}
+
+export interface Comentario {
+    texto?: string | null
+    userId: number
+    bookId: number
+}
+
+//interafaces de requests y responses
 export interface GetBooksResponse {
     total: number,
     books: Book[]

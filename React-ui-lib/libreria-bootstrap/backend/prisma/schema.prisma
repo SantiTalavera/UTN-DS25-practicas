@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "./generated/prisma"
+  output = "../src/generated/prisma"
 }
 
 datasource db {
@@ -16,10 +16,35 @@ enum Section {
   Populares_de_la_actualidad
 }
 
+model User{
+    id Int @id @default(autoincrement())
+    username String @unique
+    password String
+    comentarios Comentario[]   
+}
+
+model Autor{
+    id Int @id @default(autoincrement())
+    nombre String
+    epoca String
+    books book[]
+}
+
+model Comentario {
+    id Int @id @default(autoincrement())
+    texto String?
+    userId Int
+    user  User  @relation(fields: [userId], references: [id])
+    bookId Int
+    book  book  @relation(fields: [bookId], references: [id])
+}
+
 model book {
   id      Int     @id @default(autoincrement())
-  title   String
-  author  String
-  url     String?     // opcional como definiste
-  section Section
+  titulo   String
+  img     String?     // opcional como definiste
+  seccion Section
+  comentarios Comentario[]
+  autorId Int
+  autor  Autor  @relation(fields: [autorId], references: [id])
 }
