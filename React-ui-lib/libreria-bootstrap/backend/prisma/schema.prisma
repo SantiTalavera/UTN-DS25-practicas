@@ -11,7 +11,7 @@ datasource db {
 
 enum Section {
   Filosofos_de_la_antiguedad
-  Renovadores_Del_Renacimiento
+  Renovadores_del_renacimiento
   Difusores_contemporaneos
   Populares_de_la_actualidad
 }
@@ -27,7 +27,7 @@ model Autor{
     id Int @id @default(autoincrement())
     nombre String
     epoca String
-    books book[]
+    books Book[]
 }
 
 model Comentario {
@@ -36,10 +36,10 @@ model Comentario {
     userId Int
     user  User  @relation(fields: [userId], references: [id])
     bookId Int
-    book  book  @relation(fields: [bookId], references: [id])
+    book  Book  @relation(fields: [bookId], references: [id])
 }
 
-model book {
+model Book {
   id      Int     @id @default(autoincrement())
   titulo   String
   img     String?     // opcional como definiste
