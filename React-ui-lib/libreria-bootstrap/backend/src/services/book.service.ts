@@ -52,7 +52,6 @@ function toBookDTO(book: BookPrisma & { autor?: AutorPrisma }): BookDTO {
 
 // --- LÓGICA DEL SERVICIO ---
 
-// 📌 Obtener todos los libros
 export async function getAllBooks(): Promise<GetBooksResponse> {
   const booksFromDB = await prisma.book.findMany({
     include: { autor: true },
@@ -63,7 +62,7 @@ export async function getAllBooks(): Promise<GetBooksResponse> {
   return { books: booksDTO, total: booksDTO.length };
 }
 
-// 📌 Obtener un libro por ID
+
 export async function getBookById(id: number): Promise<BookDTO> {
   const book = await prisma.book.findUnique({
     where: { id },
@@ -79,7 +78,6 @@ export async function getBookById(id: number): Promise<BookDTO> {
   return toBookDTO(book);
 }
 
-// 📌 Crear un nuevo libro
 export async function createBook(data: PostBookRequest): Promise<PostBookResponse> {
   // Verificar que el autor exista
   const authorExists = await prisma.autor.findUnique({
@@ -110,7 +108,7 @@ export async function createBook(data: PostBookRequest): Promise<PostBookRespons
   return { book: toBookDTO(createdBook), message: 'Libro creado exitosamente' };
 }
 
-// 📌 Actualizar un libro por ID
+
 export async function updateBook(id: number, data: PutBookRequest): Promise<PostBookResponse> {
   try {
     const updatedBook = await prisma.book.update({
@@ -133,7 +131,6 @@ export async function updateBook(id: number, data: PutBookRequest): Promise<Post
   }
 }
 
-// 📌 Eliminar un libro por ID
 export async function deleteBook(id: number): Promise<DeleteBookResponse> {
   try {
     await prisma.book.delete({ where: { id } });
