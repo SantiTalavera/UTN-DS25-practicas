@@ -47,4 +47,5 @@ model Book {
   comentarios Comentario[]
   autorId Int
   autor  Autor  @relation(fields: [autorId], references: [id])
+  @@unique([titulo, autorId]) // ← evita duplicados por título+autor
 }
