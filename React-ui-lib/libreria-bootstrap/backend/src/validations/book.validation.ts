@@ -1,9 +1,11 @@
-import {z} from 'zod';
+import { z } from 'zod';
+import { SECCIONES } from '../types/books';
 
 export const createBookSchema = z.object({
-  titulo: z.string().min(1, 'Se requiere un título').max(255, 'El título es demasiado largo').trim(),
-  autorId: z.number().int('El ID del autor debe ser un número entero').positive('El ID del autor debe ser un número positivo'),
-  seccion: z.enum(['Filosofos de la antiguedad', 'Renovadores del renacimiento', 'Difusores contemporaneos', 'Populares en la actualidad']), 
-})
+  titulo: z.string().trim().min(1, 'Se requiere un título').max(255, 'El título es demasiado largo'),
+  autorId: z.coerce.number().int('Debe ser entero').positive('Debe ser positivo'),
+  seccion: z.enum(SECCIONES),
+  img: z.string().url('URL inválida').optional().nullable(),
+});
 
 export const updateBookSchema = createBookSchema.partial();

@@ -1,25 +1,20 @@
 import express from 'express';
+import cors from 'cors';
 import { booksRoutes } from './routes/book.routes';
 import { logRequest } from './middlewares/logger.middleware';
 import { handleError } from './middlewares/error.middleware';
-import cors from 'cors';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: '*', // Permitir todas las solicitudes CORS
-}));
-
-// Middlewares globlales
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 app.use(logRequest);
 
-// Error handling middleware
-app.use(handleError);
-
 app.use('/api/books', booksRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+app.use((_req, res) => res.status(404).json({ message: 'Recurso no encontrado' }));
+
+app.use(handleError);
+
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

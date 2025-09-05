@@ -1,63 +1,44 @@
+// src/controllers/book.controller.ts
 import { Request, Response, NextFunction } from "express";
-import * as bookService from "../services/book.service";
+import * as service from "../services/book.service";
 
-export async function getAllBooksController(req: Request, res: Response, next: NextFunction) {
+export async function getAllBooksController(_req: Request, res: Response, next: NextFunction) {
   try {
-    const result = await bookService.getAllBooks();
-    res.json({ success: true, data: result });
-  } catch (error) {
-    next(error);
-  }
+    const payload = await service.getAllBooks();
+    res.status(200).json(payload); // { books, total }
+  } catch (err) { next(err); }
 }
-
 
 export async function getBookByIdController(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
-    const book = await bookService.getBookById(id);
-    res.json({ success: true, data: book });
-  } catch (error) {
-    next(error);
-  }
+    const id = Number(req.params.id);
+    const book = await service.getBookById(id);
+    res.status(200).json({ book });
+  } catch (err) { next(err); }
 }
-
 
 export async function createBookController(req: Request, res: Response, next: NextFunction) {
   try {
-    const result = await bookService.createBook(req.body);
-    res.status(201).json({
-      success: true,
-      message: result.message,
-      data: result.book
-    });
-  } catch (error) {
-    next(error);
-  }
+    const result = await service.createBook(req.body);
+    const code = result.book ? 201 : 400;
+    res.status(code).json(result); // { book|null, message }
+  } catch (err) { next(err); }
 }
 
 export async function updateBookController(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
-    const result = await bookService.updateBook(id, req.body);
-    res.json({
-      success: true,
-      message: result.message,
-      data: result.book
-    });
-  } catch (error) {
-    next(error);
-  }
+    const id = Number(req.params.id);
+    const result = await service.updateBook(id, req.body);
+    const code = result.book ? 200 : 404;
+    res.status(code).json(result); // { book|null, message }
+  } catch (err) { next(err); }
 }
 
 export async function deleteBookController(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
-    const result = await bookService.deleteBook(id);
-    res.json({
-      success: true,
-      message: result.message
-    });
-  } catch (error) {
-    next(error);
-  }
+    const id = Number(req.params.id);
+    const result = await service.deleteBook(id);
+    const code = result.message.includes('no encontrado') ? 404 : 200;
+    res.status(code).json(result); // { message }
+  } catch (err) { next(err); }
 }

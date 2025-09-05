@@ -1,69 +1,76 @@
-import React, { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
+// value = EXACTO como espera el backend / DTO
+// label = como lo ve el usuario
 const SECCIONES = [
-  'Filosofos de la antiguedad',
-  'Renovadores del Renacimiento',
-  'Difusores contemporaneos',
-  'Populares en la actualidad'
-]
+  { value: 'Filosofos de la antiguedad', label: 'Filósofos de la antigüedad' },
+  { value: 'Renovadores del renacimiento', label: 'Renovadores del Renacimiento' },
+  { value: 'Difusores contemporaneos', label: 'Difusores contemporáneos' },
+  { value: 'Populares en la actualidad', label: 'Populares en la actualidad' },
+];
 
 export default function AgregarLibroForm({ onAgregar }) {
-  // 1️⃣ Incluimos seccion en el estado
-  const [datosLibro, setDatosLibro] = useState({
+  const [form, setForm] = useState({
     titulo: '',
-    autor: '',
-    img: 'https://via.placeholder.com/150',
-    seccion: SECCIONES[0]   // valor por defecto
-  })
+    autorId: '',
+    img: 'https://via.placeholder.com/300x400?text=Portada',
+    seccion: SECCIONES[0].value,
+  });
 
-  const actualizarCampo = (campo, valor) => {
-    setDatosLibro(prev => ({ ...prev, [campo]: valor }))
-  }
+  const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
-  const manejarEnvio = (e) => {
-    e.preventDefault()
-    onAgregar({
-      id: Date.now(),
-      ...datosLibro
-    })
-    // Reseteo formulario (mantiene primera sección)
-    setDatosLibro({
+  const submit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      titulo: form.titulo.trim(),
+      img: form.img?.trim() || null,
+      autorId: Number(form.autorId), // backend espera number
+      seccion: form.seccion,         // value exacto (DTO)
+    };
+    await onAgregar(payload);
+    setForm({
       titulo: '',
-      autor: '',
-      img: 'https://via.placeholder.com/150',
-      seccion: SECCIONES[0]
-    })
-  }
+      autorId: '',
+      img: 'https://via.placeholder.com/300x400?text=Portada',
+      seccion: SECCIONES[0].value,
+    });
+  };
 
   return (
-    <Form onSubmit={manejarEnvio} className="mb-4">
+    <Form onSubmit={submit} className="mb-4">
       <Form.Group className="mb-3">
         <Form.Label>Título</Form.Label>
         <Form.Control
           type="text"
-          value={datosLibro.titulo}
-          onChange={e => actualizarCampo('titulo', e.target.value)}
+          value={form.titulo}
+          onChange={(e) => set('titulo', e.target.value)}
           placeholder="Ingresa el título"
+          required
         />
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Autor</Form.Label>
+        <Form.Label>Autor (ID)</Form.Label>
         <Form.Control
-          type="text"
-          value={datosLibro.autor}
-          onChange={e => actualizarCampo('autor', e.target.value)}
-          placeholder="Ingresa el autor"
+          type="number"
+          min={1}
+          value={form.autorId}
+          onChange={(e) => set('autorId', e.target.value)}
+          placeholder="Ej: 1 (luego cambiara a un selector)"
+          required
         />
+        <Form.Text className="text-muted">
+          Por ahora pedimos el <strong>ID del autor</strong> para alinear con el backend.
+        </Form.Text>
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Portada (URL)</Form.Label>
         <Form.Control
-          type="text"
-          value={datosLibro.img}
-          onChange={e => actualizarCampo('img', e.target.value)}
+          type="url"
+          value={form.img}
+          onChange={(e) => set('img', e.target.value)}
           placeholder="https://..."
         />
       </Form.Group>
@@ -71,18 +78,16 @@ export default function AgregarLibroForm({ onAgregar }) {
       <Form.Group className="mb-4">
         <Form.Label>Sección</Form.Label>
         <Form.Select
-          value={datosLibro.seccion}
-          onChange={e => actualizarCampo('seccion', e.target.value)}
+          value={form.seccion}
+          onChange={(e) => set('seccion', e.target.value)}
         >
-          {SECCIONES.map(sec => (
-            <option key={sec} value={sec}>{sec}</option>
+          {SECCIONES.map(({ value, label }) => (
+            <option key={value} value={value}>{label}</option>
           ))}
         </Form.Select>
       </Form.Group>
 
-      <Button variant="primary" type="submit">
-        Agregar Libro
-      </Button>
+      <Button variant="primary" type="submit">Agregar Libro</Button>
     </Form>
-  )
+  );
 }
