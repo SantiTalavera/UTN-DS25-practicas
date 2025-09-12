@@ -1,14 +1,15 @@
 import { Router } from 'express';
-import * as controller from '../controllers/book.controller';
+import * as bookController from '../controllers/book.controller';
 import { createBookSchema, updateBookSchema } from '../validations/book.validation';
 import { validate } from '../middlewares/validation.middleware';
+import { authenticate, authorize } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.get('/', controller.getAllBooksController);
-router.get('/:id', controller.getBookByIdController);
-router.post('/', validate(createBookSchema),controller.createBookController);
-router.put('/:id',validate(updateBookSchema), controller.updateBookController);
-router.delete('/:id', controller.deleteBookController);
+router.get('/', authenticate, authorize('admin', 'user'),bookController.getAllBooksController);
+router.get('/:id',authenticate, authorize('admin', 'user') , bookController.getBookByIdController);
+router.post('/', authenticate, authorize('admin', 'user'), validate(createBookSchema), bookController.createBookController);
+router.put('/:id', authenticate, authorize('admin', 'user'), validate(updateBookSchema), bookController.updateBookController);
+router.delete('/:id', authenticate, authorize('admin'), bookController.deleteBookController);
 
 export const booksRoutes = router;

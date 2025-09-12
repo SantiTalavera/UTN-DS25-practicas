@@ -44,7 +44,7 @@ export interface BookDetailDTO extends Omit<BookListDTO, 'autor'> {
   >;
 }
 
-// --- Respuestas ---
+// --- Respuestas de books---
 export interface GetBooksResponse { total: number; books: BookListDTO[]; }
 export interface GetBookResponse  { book: BookDetailDTO | null; message?: string; }
 
@@ -53,3 +53,25 @@ export interface PostBookResponse { book: BookDetailDTO | null; message: string;
 export interface PutBookRequest   { titulo?: string; img?: string | null; autorId?: number; seccion?: Seccion; }
 export interface PutBookResponse  { book: BookDetailDTO | null; message: string; }
 export interface DeleteBookResponse { message: string; }
+
+// --- Respuestas de users---
+export interface UsersListResponse { total: number; users: UserDTO[]; }
+export interface UserResponse { user: UserDTO | null; message?: string; }
+export interface CreateUserRequest {
+  username: string;
+  password: string;
+  role?: 'admin' | 'user'; // opcional, por defecto 'user'
+} 
+export interface CreateUserResponse {
+  user: { id: number; username: string; role: 'admin' | 'user' }; // ajusta roles
+  message: string;
+}
+export interface UpdateUserRequest {
+  username?: string;
+  password?: string;
+  role?: 'admin' | 'user'; // opcional, por defecto 'user'
+} 
+export interface UpdateUserResponse {
+  user: { id: number; username: string; role: 'admin' | 'user' }; // ajusta roles
+  message: string;
+}

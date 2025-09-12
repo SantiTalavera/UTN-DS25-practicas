@@ -16,11 +16,17 @@ enum Section {
   Populares_de_la_actualidad
 }
 
+enum Role {
+  admin
+  user
+}
+
 model User{
     id Int @id @default(autoincrement())
     username String @unique
     password String
     comentarios Comentario[]   
+    role Role @default(user)
 }
 
 model Autor{
