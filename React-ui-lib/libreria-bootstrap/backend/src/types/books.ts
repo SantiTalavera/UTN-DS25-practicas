@@ -16,7 +16,7 @@ export const SECCIONES = [
 export type Seccion = typeof SECCIONES[number];
 
 //interfaces de dominio
-export interface UserDTO extends Omit<PrismaUser, "comentarios"> {
+export interface UserDTO extends Omit<PrismaUser, "comentarios" | "password"> {
   comentarios?: ComentarioDTO[]; // expandido con DTOs
 }
 
@@ -60,6 +60,7 @@ export interface UserResponse { user: UserDTO | null; message?: string; }
 export interface CreateUserRequest {
   username: string;
   password: string;
+  email: string;
   role?: 'admin' | 'user'; // opcional, por defecto 'user'
 } 
 export interface CreateUserResponse {
@@ -69,6 +70,7 @@ export interface CreateUserResponse {
 export interface UpdateUserRequest {
   username?: string;
   password?: string;
+  email?: string;
   role?: 'admin' | 'user'; // opcional, por defecto 'user'
 } 
 export interface UpdateUserResponse {

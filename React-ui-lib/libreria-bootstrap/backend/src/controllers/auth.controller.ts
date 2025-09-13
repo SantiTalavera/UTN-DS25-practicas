@@ -1,11 +1,10 @@
 import { Request,Response,NextFunction } from "express";
 import * as authService from "../services/auth.service";
-import { LoginRequest, LoginResponse } from "../types/auth";
-import { success } from "zod";
 
-export async function login(req: Request, res: Response, next: NextFunction) {
+export async function loginController(req: Request, res: Response, next: NextFunction) {
     try {
-        const result = await authService.login(req.body);
+        const { email, password } = req.body as { email: string; password: string };
+        const result = await authService.loginService(email, password);
         res.json({success: true, data: result});
     } catch (error) {
         next(error);

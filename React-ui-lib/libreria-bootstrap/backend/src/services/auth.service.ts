@@ -1,28 +1,47 @@
-import prisma from "../config/prisma";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import {LoginRequest, LoginResponse} from "../types/auth";
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import prisma from '../config/prisma';
 
-export async function login(data: LoginRequest): Promise<LoginResponse> {
-    const user = await prisma.user.findUnique({
-        where: {username: data.username}
-    });
-    if (!user) {
-        const error = new Error("Credenciales invalidas")as any;
-        error.status = 401;
-        throw error;
-    }
-    const validPassword = await bcrypt.compare(data.password, user.password);
-    if (!validPassword) {
-        const error = new Error("Credenciales invalidas")as any;
-        error.status = 401;
-        throw error;
-    }
-    const token = jwt.sign(
-        {id: user.id, username: user.username, role: user.role},    
-        process.env.JWT_SECRET !, 
-        {expiresIn: process.env.JWT_SECRET_EXPIRES_IN}
-    );
-    const {password: _, ...userWithoutPassword} = user;
-    return {user: userWithoutPassword, token};
+type JWTRole = 'USER' | 'ADMIN';
+type JWTPayload = { 
+    sub: number;
+    email: string; 
+    role: JWTRole;
+};
+
+export async function loginService(email: string, password: string) {
+    // 1) Buscar usuario por email
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('Credenciales inválidas');
+  }
+
+  // 2) Comparar contraseña
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) throw new Error('Credenciales inválidas');
+
+  // 3) Firmar JWT
+  const JWT_SECRET = process.env.JWT_SECRET as Secret | undefined;
+  if (!JWT_SECRET) {
+    throw new Error('Falta JWT_SECRET en .env');
+  }
+  const EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '2h';
+
+  const payload: JWTPayload = {
+    sub: user.id,
+    email: user.email,
+    role: user.role as JWTRole,
+  };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: EXPIRES_IN } as SignOptions);
+
+  // 4) Devolver info segura (sin hash)
+  return {
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    },
+  };
 }

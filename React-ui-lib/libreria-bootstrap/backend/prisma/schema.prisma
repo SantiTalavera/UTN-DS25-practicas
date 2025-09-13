@@ -21,12 +21,26 @@ enum Role {
   user
 }
 
-model User{
+/*model User{
     id Int @id @default(autoincrement())
     username String @unique
     password String
     comentarios Comentario[]   
     role Role @default(user)
+}*/
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String?
+  email        String    @unique
+  password     String
+  role         Role       @default(user)
+  comentarios Comentario[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([role])  
 }
 
 model Autor{
