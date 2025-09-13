@@ -26,6 +26,9 @@ import Sidebar from './Sidebar'
  `
 
 export default function Layout({ children }) {
+    const { user, token, logout } = useAuth();
+    const nav = useNavigate();
+    const salir = () => { logout(); nav('/login'); };
   return (
     <>
       <style>{customStyles}</style>
@@ -35,6 +38,16 @@ export default function Layout({ children }) {
           <Navbar.Brand as={Link} to="/">
             Librería Estoica
           </Navbar.Brand>
+           <div className="ms-auto d-flex align-items-center gap-2">
+            {token ? (
+              <>
+                <span className="text-muted small">Hola, {user?.username ?? 'usuario'}</span>
+                <button className="btn btn-outline-secondary btn-sm" onClick={salir}>Salir</button>
+              </>
+            ) : (
+              <Link className="btn btn-primary btn-sm" to="/login">Ingresar</Link>
+            )}
+          </div>
           {/* Toggle sólo en < md */}
           <Navbar.Toggle 
             aria-controls="offcanvas-sidebar" 

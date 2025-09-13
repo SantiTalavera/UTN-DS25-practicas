@@ -6,7 +6,7 @@ const API = `${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/api/book
 
 export function CatalogoProvider({ children }) {
   // GET inicial (no re-fetch al agregar, mantenemos estado local)
-  const { datos, cargando, error } = useFetch(API);
+  const { datos, cargando, error } = useFetch(BASE_URL, { auth: true });
   const [catalogo, setCatalogo] = useState([]);
 
   useEffect(() => {
