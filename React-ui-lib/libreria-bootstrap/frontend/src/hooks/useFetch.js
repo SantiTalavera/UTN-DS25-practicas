@@ -17,14 +17,14 @@ export function useFetch(url, options = {}) {
 
         const headers = new Headers(options.headers || {});
         if (options.auth) {
-          const token = getToken();
+          const token = getToken()
           if (!token || isTokenExpired(token)) {
-            clearAuth();
-            throw new Error('Token no proporcionado'); // el front lo mostrará o redirigirá
-            setCargando(false);
-            return
+            clearAuth()
+            setError('Token no proporcionado')  // 👈 estado de error
+            setCargando(false)
+            return                               // 👈 cortar sin throw
           }
-          headers.set('Authorization', `Bearer ${token}`);
+          headers.set('Authorization', `Bearer ${token}`)
         }
 
         const res = await fetch(url, { ...options, headers, signal: ctrl.signal });
@@ -37,8 +37,8 @@ export function useFetch(url, options = {}) {
         }
 
         if (!res.ok) {
-          const msg = typeof body === 'string' ? body : body?.message || `HTTP ${res.status}`;
-          throw new Error(msg);
+          setError(typeof body === 'string' ? body : body?.message || `HTTP ${res.status}`)
+          return
         }
 
         setDatos(body);

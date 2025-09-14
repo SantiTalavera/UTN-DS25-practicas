@@ -1,6 +1,6 @@
 // src/components/Layout.jsx
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Navbar,
   Container,
@@ -10,6 +10,7 @@ import {
   Col
 } from 'react-bootstrap'
 import Sidebar from './Sidebar'
+import { useAuth } from '../context/authContext' 
 
 
  const customStyles = `
@@ -27,8 +28,8 @@ import Sidebar from './Sidebar'
 
 export default function Layout({ children }) {
     const { user, token, logout } = useAuth();
-    const nav = useNavigate();
-    const salir = () => { logout(); nav('/login'); };
+    const navigate = useNavigate();
+    const salir = () => { logout(); navigate('/login', {replace:true}); };
   return (
     <>
       <style>{customStyles}</style>
@@ -39,14 +40,12 @@ export default function Layout({ children }) {
             Librería Estoica
           </Navbar.Brand>
            <div className="ms-auto d-flex align-items-center gap-2">
-            {token ? (
+            {
               <>
                 <span className="text-muted small">Hola, {user?.username ?? 'usuario'}</span>
                 <button className="btn btn-outline-secondary btn-sm" onClick={salir}>Salir</button>
               </>
-            ) : (
-              <Link className="btn btn-primary btn-sm" to="/login">Ingresar</Link>
-            )}
+            }
           </div>
           {/* Toggle sólo en < md */}
           <Navbar.Toggle 

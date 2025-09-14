@@ -1,19 +1,20 @@
 import { createContext, useContext, useMemo, useState, useEffect, useCallback } from "react";
 import { useFetch } from "../hooks/useFetch";
+import { getToken } from "../helpers/auth";
 
 const CatalogoContext = createContext(null);
-const API = `${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/api/books`;
+const BASE_URL = `${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/api/books`;
 
 export function CatalogoProvider({ children }) {
-  // GET inicial (no re-fetch al agregar, mantenemos estado local)
+  // GET inicial (autenticado)
   const { datos, cargando, error } = useFetch(BASE_URL, { auth: true });
   const [catalogo, setCatalogo] = useState([]);
 
   useEffect(() => {
     if (!datos) return;
 
-    // Soporta { books, total } o { data: { books, total } }
-    const payload = datos?.books ? datos : datos?.data ? datos.data : null;
+    // Soporta { success, data: { books, total } } o { books, total }
+    const payload = datos?.data ?? datos;
     const arr = Array.isArray(payload?.books) ? payload.books : [];
 
     const normalizados = arr.map((b) => ({
@@ -28,11 +29,15 @@ export function CatalogoProvider({ children }) {
     setCatalogo(normalizados);
   }, [datos]);
 
-  // POST alineado con backend
+  // POST alineado con backend (necesita autorId numérico)
   const agregarLibro = useCallback(async ({ titulo, img, autorId, seccion }) => {
-    const res = await fetch(API, {
+    const token = getToken();
+    const res = await fetch(BASE_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify({ titulo, img, autorId, seccion }),
     });
 
@@ -42,22 +47,23 @@ export function CatalogoProvider({ children }) {
     } catch {
       throw new Error(`Error HTTP ${res.status}`);
     }
-    if (!res.ok || !body?.book) {
-      // backend responde { book: BookDTO|null, message }
+
+    // back puede responder {success, message, data: book} o {book, message}
+    const creado = body?.data ?? body?.book ?? null;
+    if (!res.ok || !creado) {
       throw new Error(body?.message ?? `Error HTTP ${res.status}`);
     }
 
-    const b = body.book;
     const normalizado = {
-      id: b.id,
-      titulo: b.titulo ?? "",
-      autor: typeof b.autor === "string" ? b.autor : (b.autor?.nombre ?? ""),
-      img: b.img ?? "/Imagenes/placeholder.png",
-      seccion: b.seccion ?? "",
+      id: creado.id ?? creado._id ?? crypto.randomUUID(),
+      titulo: creado.titulo ?? "",
+      autor: typeof creado.autor === "string" ? creado.autor : (creado.autor?.nombre ?? ""),
+      img: creado.img ?? "/Imagenes/placeholder.png",
+      seccion: creado.seccion ?? "",
     };
 
     setCatalogo((prev) => [...prev, normalizado]);
-    return normalizado; // por si el caller quiere usarlo
+    return normalizado;
   }, []);
 
   const value = useMemo(

@@ -10,18 +10,24 @@ export function AuthProvider({ children }) {
   const [checking, setChecking] = useState(true);
 
   // Rehidratar sesión al cargar / validar expiración
-  useEffect(() => {
-    const t = getToken();
-    if (t && !isTokenExpired(t)) {
-      setToken(t);
-      setUser(getUser());
-    } else {
-      clearAuth();
-      setToken(null);
-      setUser(null);
+    useEffect(() => {
+    try {
+        const t = getToken()
+        if (t && !isTokenExpired(t)) {
+        setToken(t)
+        setUser(getUser())
+        } else {
+        clearAuth()
+        setToken(null)
+        setUser(null)
+        }
+    } catch (e) {
+        console.error('Auth bootstrap error:', e)
+        clearAuth()
+    } finally {
+        setChecking(false)   // 👈 clave
     }
-    setChecking(false);
-  }, []);
+    }, [])
 
   const login = useCallback(async (email, password) => {
     const res = await fetch(API, {

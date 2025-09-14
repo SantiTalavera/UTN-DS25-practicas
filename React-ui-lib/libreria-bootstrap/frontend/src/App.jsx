@@ -1,41 +1,57 @@
 // src/App.jsx
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Layout from './components/Layout'
-import HomePage from './pages/HomePage'
-import LoginPage from './pages/LoginPage'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/authContext'
 import { CatalogoProvider } from './context/CatalogoContext'
-// App.jsx
-function Private({ children }) {
+import Layout from './components/Layout'
+import LoginPage from './pages/LoginPage'
+import HomePage from './pages/HomePage'
+import { ErrorBoundary } from './components/ErrorBoundary'
+
+function Private() {
   const { token, checking } = useAuth()
-  if (checking) return <div className="p-4">Cargando sesión…</div> // ← visible
+  if (checking) return <div className="min-vh-100 d-flex align-items-center justify-content-center">Cargando sesión…</div>
   if (!token) return <Navigate to="/login" replace />
-  return children
+  return <Outlet />
 }
 
+// login sólo si no hay sesión
+function LoggedOutOnly() {
+  const { token, checking } = useAuth()
+  if (checking) return null
+  if (token) return <Navigate to="/" replace />
+  return <Outlet />
+}
+
+function AppShell() {
+  return (
+    <ErrorBoundary>
+      <CatalogoProvider>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </CatalogoProvider>
+    </ErrorBoundary>
+  )
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ErrorBoundary>
-        <Layout>
-          <Routes>
+        <Routes>
+          <Route element={<LoggedOutOnly />}>
             <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/"
-              element={
-                <Private>
-                  <CatalogoProvider>
-                    <HomePage />
-                  </CatalogoProvider>
-                </Private>
-              }
-            />
-          </Routes>
-        </Layout>
-        </ErrorBoundary>
+          </Route>
+
+          <Route element={<Private />}>
+            <Route element={<AppShell />}>
+              <Route path="/" element={<HomePage />} />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </AuthProvider>
     </BrowserRouter>
   )

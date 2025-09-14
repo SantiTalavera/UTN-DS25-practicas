@@ -23,11 +23,11 @@ export default function HomePage() {
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase();
     if (!t) return cuatroRandom;
-    return catalogo
+    return (catalogo || [])
       .filter(b =>
-        b.titulo.toLowerCase().includes(t) ||
-        b.autor.toLowerCase().includes(t) ||
-        b.seccion.toLowerCase().includes(t)
+        (b.titulo || '').toLowerCase().includes(t) ||
+        (b.autor || '').toLowerCase().includes(t) ||
+        (b.seccion || '').toLowerCase().includes(t)
       )
       .slice(0, 12);
   }, [q, catalogo, cuatroRandom]);
@@ -35,39 +35,45 @@ export default function HomePage() {
   if (cargando) return <div className="text-center my-4"><Spinner animation="border" /> Cargando...</div>;
   if (error) return <Alert variant="danger" className="my-4">Error: {error}</Alert>;
 
-  return (
-    <>
-      <FraseRandom />
+return (
+  <>
+    <FraseRandom />
 
-      <AgregarLibroForm onAgregar={agregarLibro} />
+    {error ? (
+      <Alert variant="danger" className="my-4">Error: {error}</Alert>
+    ) : (
+      <>
+        <AgregarLibroForm onAgregar={agregarLibro} />
 
-      <Form.Control
-        placeholder="Buscar por título, autor o sección..."
-        className="mb-3"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-      />
+        <Form.Control
+          placeholder="Buscar por título, autor o sección..."
+          className="mb-3"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
 
-      <Row xs={1} md={2} lg={4} className="g-3">
-        {visibles.map((b) => (
-          <Col key={b.id}>
-            <Card className="h-100">
-              <Card.Img
-                variant="top"
-                src={b.img || '/Imagenes/placeholder.png'}
-                alt={b.titulo}
-                onError={(e) => (e.currentTarget.src = '/Imagenes/placeholder.png')}
-              />
-              <Card.Body>
-                <Card.Title className="fs-6 mb-1">{b.titulo}</Card.Title>
-                <Card.Subtitle className="text-muted mb-2">{b.autor}</Card.Subtitle>
-                <Card.Text className="small">{b.seccion}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-        {!visibles.length && <div className="text-muted">Sin resultados.</div>}
-      </Row>
-    </>
-  );
+        <Row xs={1} md={2} lg={4} className="g-3">
+          {visibles.map((b) => (
+            <Col key={b.id}>
+              <Card className="h-100">
+                <Card.Img
+                  variant="top"
+                  src={b.img || '/Imagenes/placeholder.png'}
+                  alt={b.titulo}
+                  onError={(e) => (e.currentTarget.src = '/Imagenes/placeholder.png')}
+                />
+                <Card.Body>
+                  <Card.Title className="fs-6 mb-1">{b.titulo}</Card.Title>
+                  <Card.Subtitle className="text-muted mb-2">{b.autor}</Card.Subtitle>
+                  <Card.Text className="small">{b.seccion}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+          {!visibles.length && <div className="text-muted">Sin resultados.</div>}
+        </Row>
+      </>
+    )}
+  </>
+);
 }
