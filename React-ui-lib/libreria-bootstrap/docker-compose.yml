@@ -1,55 +1,55 @@
-version : '3.8'
-services :
+version: '3.8'
+services:
   # Frontend React
-  frontend :
+  frontend:
     build:
-      context : ./frontend
-      dockerfile : Dockerfile
-    container_name : app_frontend
-    env_file :
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    env_file:
       - frontend/.env
     ports:
       - "5173:5173"
-    depends_on :
+    depends_on:
       - backend
-    volumes :
+    volumes:
       - ./frontend:/app
       - /app/node_modules
-    networks :
+    networks:
       - app-network
   # Backend Node.js
-  backend :
+  backend:
     build:
-      context : ./backend
-      dockerfile : Dockerfile
-    container_name : app_backend
-    env_file :
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app_backend
+    env_file:
       - ./backend/.env
     ports:
       - "3000:3000"
-    depends_on :
+    depends_on:
       - db
-    volumes :
+    volumes:
       - ./backend:/app
       - /app/node_modules
-    networks :
+    networks:
       - app-network
   # Base de Datos PostgreSQL
   db:
     image: postgres:14-alpine
-    container_name : app_db
-    env_file :
+    container_name: app_db
+    env_file:
       - ./backend/.env
     ports:
       - "5432:5432"
-    volumes :
+    volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/prisma/migrations:/docker-entrypoint-initdb.d
-    networks :
+    networks:
       - app-network
-  networks :
-    app-network :
-      driver : bridge
-  volumes :
-    postgres_data :
-      driver : local
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  postgres_data:
+    driver: local
