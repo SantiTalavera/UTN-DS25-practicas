@@ -16,4 +16,5 @@ RUN npx prisma generate
 COPY . .
 # Exponer puerto del servidor
 EXPOSE 3000
-# Comando por defecto al
+# Comando por defecto al iniciar el contenedor
+CMD ["npm", "run", "dev"]

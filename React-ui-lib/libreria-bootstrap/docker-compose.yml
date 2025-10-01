@@ -8,6 +8,10 @@ services:
     container_name: app_frontend
     env_file:
       - frontend/.env
+    #environment:
+      #- VITE_API_URL=http://localhost:3000
+      #- PORT=5173
+      #- HOST=0.0.0.0
     ports:
       - "5173:5173"
     depends_on:
@@ -25,6 +29,14 @@ services:
     container_name: app_backend
     env_file:
       - ./backend/.env
+    #environment:
+      #NODE_ENV: ${NODE_ENV}
+      #PORT: "${PORT}"
+      #JWT_SECRET: ${JWT_SECRET}
+      #JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      #FRONTEND_URL: http://localhost:5173
+      #DATABASE_URL: ${DATABASE_URL}
+      #DIRECT_URL: ${DIRECT_URL}
     ports:
       - "3000:3000"
     depends_on:
@@ -39,12 +51,15 @@ services:
     image: postgres:14-alpine
     container_name: app_db
     env_file:
-      - ./backend/.env
+     - ./backend/.env
+    #environment:
+      #POSTGRES_USER: ${POSTGRES_USER}
+      #POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      #POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/prisma/migrations:/docker-entrypoint-initdb.d
     networks:
       - app-network
 networks:
