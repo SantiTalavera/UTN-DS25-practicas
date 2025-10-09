@@ -82,7 +82,7 @@ const sections = [
   { to: '/difusores',    label: 'Difusores contemporáneos' },
   { to: '/populares',    label: 'Populares en la actualidad' },
   { to: '/registrarse',  label: 'Registrarse' },
-  { to: '/contacto',     label: 'Contacto' },
+  { to: '/contact',     label: 'Contacto' },
 ];
 
 const styles = {

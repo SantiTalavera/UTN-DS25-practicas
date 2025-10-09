@@ -21,16 +21,25 @@ export function clearAuth() {
   localStorage.removeItem(USER_KEY);
 }
 
-// Utilidad para verificar expiración de un JWT (sin librerías)
-export function isTokenExpired(token) {
+export function parseJWT (token) {
   try {
-    const [, payloadB64] = token.split('.');
-    if (!payloadB64) return true;
-    const payloadJson = JSON.parse(atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/')));
-    if (!payloadJson.exp) return false; // si no tiene exp, asumimos no expira
-    const now = Date.now() / 1000;
-    return payloadJson.exp < now;
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url .replace (/-/g, '+').replace (/_/g, '/');
+    const jsonPayload = decodeURIComponent ( atob(base64 ).split('').map(c =>
+       '%' + ('00' + c.charCodeAt (0).toString (16)).slice(-2) ). join('') );
+    return JSON.parse(jsonPayload );
   } catch {
-    return true;
+      return null;
   }
+}
+
+export function getUserData () {
+  const token = getToken ();
+  return token ? parseJWT (token) : null;
+}
+
+export function isTokenExpired () {
+  const userData = getUserData ();
+  if (!userData || !userData .exp) return true;
+  return userData .exp * 1000 < Date.now();
 }

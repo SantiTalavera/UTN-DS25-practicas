@@ -1,63 +1,101 @@
-import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
-import { saveAuth, getToken, getUser, clearAuth, isTokenExpired } from '../helpers/auth';
-
-const AuthContext = createContext(null);
-const API = `${import.meta.env.VITE_API_URL ?? 'http://localhost:3000'}/api/auth/login`;
+import { createContext, useState, useContext, useEffect } from 'react';
+// Importamos los helpers existentes
+import {
+getToken,
+saveAuth,
+clearAuth,
+parseJWT,
+getUserData,
+isTokenExpired
+} from '../helpers/auth';
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(getToken());
-  const [user, setUser] = useState(getUser());
-  const [checking, setChecking] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Propiedades adicionales que necesita App.jsx
+  const token = getToken();
+  const checking = loading;
+  // Cargar usuario si ya hay token (al recargar página)
+  useEffect(() => {
+    const token = getToken(); // Usamos el helper
+    if (token && !isTokenExpired()) {
+      const userData = getUserData(); // Usamos el helper
+    setUser(userData);
+    } else if (token) {
+      clearAuth(); // Token expirado, limpiamos
+    }
+    setLoading(false);
+  }, []);
 
-  // Rehidratar sesión al cargar / validar expiración
-    useEffect(() => {
+  const login = async (email, password) => {
     try {
-        const t = getToken()
-        if (t && !isTokenExpired(t)) {
-        setToken(t)
-        setUser(getUser())
-        } else {
-        clearAuth()
-        setToken(null)
-        setUser(null)
-        }
-    } catch (e) {
-        console.error('Auth bootstrap error:', e)
-        clearAuth()
-    } finally {
-        setChecking(false)   // 👈 clave
+      // Mismo endpoint que ya usábamos
+      const res = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Error en login");
+      }
+      const { data } = await res.json();
+      saveAuth(data.token); // Usamos el helper
+      const userData = parseJWT(data.token); // Usamos el helper
+      setUser(userData);
+    } catch (error) {
+      throw new Error(error.message || "Error en login");
     }
-    }, [])
+  };
 
-  const login = useCallback(async (email, password) => {
-    const res = await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok || !body?.data?.token) {
-      throw new Error(body?.message ?? 'Credenciales inválidas');
-    }
-    const { token: tk, user: us } = body.data;
-    saveAuth({ token: tk, user: us });
-    setToken(tk);
-    setUser(us);
-    return us;
+  const logout = () => {
+    clearAuth (); // Usamos el helper
+    setUser (null);
+  };
+
+  // Verificar expiración periódicamente
+  useEffect (() => {
+    const interval = setInterval (() => {
+      if (isTokenExpired ()) {
+        logout ();
+      }
+    }, 60000 ); // Cada minuto
+    return () => clearInterval (interval );
   }, []);
 
-  const logout = useCallback(() => {
-    clearAuth();
-    setToken(null);
-    setUser(null);
-  }, []);
-
-  const value = useMemo(() => ({ token, user, checking, login, logout }), [token, user, checking, login, logout]);
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const value = {
+    user,
+    token,
+    checking,
+    login,
+    logout,
+    loading,
+    isAuthenticated: !!user,
+    isadmin: user?.role === 'admin',
+    isUser: user?.role === 'user',
+    hasRole: (role) => user?.role === role,
+    canAccess: () => {
+      // Lógica de permisos personalizada
+      if (!user) return false;
+      if (user.role === 'admin') return true;
+      // Agregar más lógica según su sistema
+      return false;
+    }
+  };
+    return (
+      <AuthContext.Provider value ={value }>
+      {children }
+      </AuthContext.Provider >
+    );
 }
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth debe usarse dentro de <AuthProvider>');
-  return ctx;
+// Hook personalizado para usar el contexto
+export function useAuth () {
+  const context = useContext (AuthContext );
+  if (!context ) {
+    throw new Error ('useAuth debe usarse dentro de AuthProvider' );
+  }
+  return context ;
 }

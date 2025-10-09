@@ -27,7 +27,7 @@ import { useAuth } from '../context/authContext'
  `
 
 export default function Layout({ children }) {
-    const { user, token, logout } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     const salir = () => { logout(); navigate('/login', {replace:true}); };
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getToken, isTokenExpired, clearAuth } from '../helpers/auth';
 
-// options: { auth?: boolean, method?, headers?, body? }
+// 
 export function useFetch(url, options = {}) {
   const [datos, setDatos] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -20,9 +20,9 @@ export function useFetch(url, options = {}) {
           const token = getToken()
           if (!token || isTokenExpired(token)) {
             clearAuth()
-            setError('Token no proporcionado')  // 👈 estado de error
+            setError('Token no proporcionado')  // estado de error
             setCargando(false)
-            return                               // 👈 cortar sin throw
+            return                               // cortar sin throw
           }
           headers.set('Authorization', `Bearer ${token}`)
         }
@@ -50,7 +50,7 @@ export function useFetch(url, options = {}) {
     })();
 
     return () => ctrl.abort();
-  }, [url]); // mantener simple; si pasás options dinámicas, agregá un "key" estable
+  }, [url]); 
 
   return { datos, cargando, error };
 }

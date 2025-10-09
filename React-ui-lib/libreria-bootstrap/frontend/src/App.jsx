@@ -6,7 +6,15 @@ import { CatalogoProvider } from './context/CatalogoContext'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
+import ContactPage from './pages/ContactPage'
+import FilosofosPage from './pages/FilosofosPage'
+import RenovadoresPage from './pages/RenovadoresPage'
+import DifusoresPage from './pages/DifusoresPage'
+import PopularesPage from './pages/PopularesPage'
+import RegistrarsePage from './pages/RegistrarsePage'
+import './App.css'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { PrivateRoute } from './components/PrivateRoute'; 
 
 function Private() {
   const { token, checking } = useAuth()
@@ -47,10 +55,22 @@ export default function App() {
           <Route element={<Private />}>
             <Route element={<AppShell />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/filosofos" element={<FilosofosPage />} />
+              <Route path="/renovadores" element={<RenovadoresPage />} />
+              <Route path="/difusores" element={<DifusoresPage />} />
+              <Route path="/populares" element={<PopularesPage />} />
+              <Route path="/registrarse" element={<RegistrarsePage />} />
+              <Route path="/contact" element={<ContactPage />} />
             </Route>
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
+
+          <Route path="/unauthorized" element={
+            <div>
+                No tienes permisos para ver esta pagina
+            </div> 
+          } />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
