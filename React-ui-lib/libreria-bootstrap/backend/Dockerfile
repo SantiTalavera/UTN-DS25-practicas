@@ -17,4 +17,4 @@ COPY . .
 # Exponer puerto del servidor
 EXPOSE 3000
 # Comando por defecto al iniciar el contenedor
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "node", "dist/index.js"]
