@@ -1,9 +1,9 @@
 import e from "express"
-import {
+import type {
   Autor as PrismaAutor,
   User as PrismaUser,
   Comentario as PrismaComentario,
-} from "../generated/prisma";
+} from "@prisma/client";
 
 
 export const SECCIONES = [

@@ -1,34 +1,43 @@
 {
-  "name": "backend",
+  "name": "libreria-api",
   "version": "1.0.0",
   "main": "index.js",
-  "engines": { "node": "20.x" },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "prestart": "npm run build",
+    "dev": "tsx watch --clear-screen=false src/app.ts",
+    "start": "node dist/app.js",
+    "seed": "prisma db seed",
+    "db:sync": "prisma db push && prisma db seed",
+    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^6.15.0",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.2.1",
+    "@prisma/client": "^6.17.1",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2",
     "zod": "^4.1.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
-    "prisma": "^6.15.0"
+    "@types/node": "^24.7.2",
+    "prisma": "^6.17.1",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  },
+  "pnpm": {
+    "neverBuiltDependencies": []
   }
 }

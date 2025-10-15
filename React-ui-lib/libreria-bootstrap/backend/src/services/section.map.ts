@@ -1,4 +1,4 @@
-import { Section as SectionPrisma } from '../generated/prisma';
+import { Section as SectionPrisma } from '@prisma/client';
 import { Seccion } from '../types/books';
 
 export const toPrismaSection = (s: Seccion): SectionPrisma => ({

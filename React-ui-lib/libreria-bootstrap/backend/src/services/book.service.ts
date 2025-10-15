@@ -1,6 +1,6 @@
 // src/services/book.service.ts
 import prisma from '../config/prisma';
-import { Autor, Book } from '../generated/prisma';
+import { Autor, Book } from '@prisma/client';
 import {
   GetBooksResponse, BookListDTO, BookDetailDTO,
   PostBookRequest, PutBookRequest, PostBookResponse, PutBookResponse, DeleteBookResponse
