@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
   // Cargar usuario si ya hay token (al recargar página)
   useEffect(() => {
     const token = getToken(); // Usamos el helper
-    if (token && !isTokenExpired()) {
+    if (token && !isTokenExpired(token)) {
       const userData = getUserData(); // Usamos el helper
     setUser(userData);
     } else if (token) {
@@ -42,9 +42,9 @@ export function AuthProvider({ children }) {
         throw new Error(error.message || "Error en login");
       }
       const { data } = await res.json();
-      saveAuth(data.token); // Usamos el helper
-      const userData = parseJWT(data.token); // Usamos el helper
-      setUser(userData);
+      const savedUser = data.user ?? parseJWT(data.token);
+      saveAuth({ token: data.token, user: savedUser });
+      setUser(savedUser);
     } catch (error) {
       throw new Error(error.message || "Error en login");
     }
