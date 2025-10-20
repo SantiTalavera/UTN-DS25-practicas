@@ -6,7 +6,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "dev": "tsx watch --clear-screen=false src/app.ts",
-    "start": "node dist/app.js",
+    "start": "node dist/server.js",
     "seed": "prisma db seed",
     "db:sync": "prisma db push && prisma db seed",
     "prisma:generate": "prisma generate",

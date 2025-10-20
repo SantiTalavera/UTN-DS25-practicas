@@ -18,7 +18,7 @@ const toListDTO = (b: BookWithAuthor): BookListDTO => ({
   seccion: toSeccionLabel(b.seccion),
 });
 
-const toDetailDTO = (b: BookWithAuthor): BookDetailDTO => ({
+export const toDetailDTO = (b: BookWithAuthor): BookDetailDTO => ({
   id: b.id,
   titulo: b.titulo,
   img: b.img ?? null,

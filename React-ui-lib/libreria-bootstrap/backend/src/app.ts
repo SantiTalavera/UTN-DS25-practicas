@@ -7,7 +7,6 @@ import { logRequest } from './middlewares/logger.middleware';
 import { handleError } from './middlewares/error.middleware';
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
 
 const corseOptions = {
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
@@ -28,4 +27,4 @@ app.use((_req, res) => res.status(404).json({ message: 'Recurso no encontrado' }
 
 app.use(handleError);
 
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+export {app};
